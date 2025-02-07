@@ -3,7 +3,7 @@ function add(x, y) {
 }
 
 function subtract(x, y) {
-    return x + y;
+    return x - y;
 }
 
 function divide(x, y) {
@@ -30,18 +30,19 @@ function splitOperation(text) {
     text = text.trim();
 
     let question;
-    if (text.includes("+")) {
-        question = text.split("+");
-        question.splice(2, 0, "+");
-    } else if (text.includes("-")) {
-        question = text.split("-");
-        question.splice(2, 0, "-");
-    } else if (text.includes("/")) {
+    
+    if (text.includes("/")) {
         question = text.split("/");
         question.splice(2, 0, "/");
     } else if (text.includes("x")) {
         question = text.split("x");
         question.splice(2, 0, "x");
+    } else if (text.includes("+")) {
+        question = text.split("+");
+        question.splice(2, 0, "+");
+    } else if (text.includes("-")) {
+        question = text.split("-");
+        question.splice(2, 0, "-");
     }
 
     question[0] = question[0].trim().split(" ").join("");
@@ -53,9 +54,13 @@ function splitOperation(text) {
 
 let questions;
 let result;
+let x;
+let y;
+let operation; 
 
 let numButtons = document.querySelectorAll("#numberButton");
 let equalButton = document.querySelector("#equalButton");
+let operationButton = document.querySelectorAll("#operationButton");
 let questionScreen = document.querySelector("#displayTextTop");
 let answerScreen = document.querySelector("#displayTextBottom");
 
@@ -66,12 +71,31 @@ numButtons.forEach((value) => {
     })
 })
 
+operationButton.forEach((value) => {
+    value.addEventListener("click", (event) => {
+        let addedOperator = event.target.textContent;
+
+        if ((questionScreen.textContent.includes("+") || questionScreen.textContent.includes("-") || questionScreen.textContent.includes("x") || questionScreen.textContent.includes("/") && questionScreen)) {
+            questions = splitOperation(questionScreen.textContent);
+            questionScreen.textContent = "";
+            x = parseInt(questions[0]);
+            y = parseInt(questions[1]);
+            operation = questions[2];
+
+            questionScreen.textContent = operate(operation, x, y) + " "  + addedOperator;
+        } else {
+            answerScreen.textContent = "";
+            questionScreen.textContent = questionScreen.textContent + value.textContent;
+        }
+    })
+})
+
 equalButton.addEventListener("click", () => {
     questions = splitOperation(questionScreen.textContent);
     questionScreen.textContent = "";
-    let x = parseInt(questions[0]);
-    let y = parseInt(questions[1]);
-    let operation = questions[2];
+    x = parseInt(questions[0]);
+    y = parseInt(questions[1]);
+    operation = questions[2];
 
     answerScreen.textContent = operate(operation, x, y);
 })

@@ -83,6 +83,11 @@
     height: 30px;
 }
 
+#operationButton {
+    width: 30px;
+    height: 30px;
+}
+
 #numberContainers {
     display: flex;
     justify-content: space-evenly;
